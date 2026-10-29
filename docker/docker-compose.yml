@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: hizliquiz
+      POSTGRES_USER: hizliquiz
+      POSTGRES_PASSWORD: hizliquiz
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.prod
+      SECRET_KEY: local-compose-secret
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CORS_ALLOWED_ORIGINS: http://localhost:5173
+      DATABASE_URL: postgres://hizliquiz:hizliquiz@db:5432/hizliquiz
+    depends_on:
+      - db
+    ports:
+      - "8000:8080"
+    command: sh docker/start.sh
+
+volumes:
+  pgdata:
