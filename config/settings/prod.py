@@ -5,7 +5,10 @@ DEBUG = False
 if not env("SECRET_KEY", default=""):  # noqa: F405
     raise RuntimeError("SECRET_KEY ortam degiskeni zorunlu")
 
-# DigitalOcean TLS'i load balancer'da sonlandirir
+if not env("DATABASE_URL", default=""):  # noqa: F405
+    raise RuntimeError("DATABASE_URL ortam degiskeni zorunlu")
+
+# Render TLS'i load balancer'da sonlandirir
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)  # noqa: F405
 SESSION_COOKIE_SECURE = True
