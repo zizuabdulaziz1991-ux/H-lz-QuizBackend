@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import Category, Choice, Question, QuizSession
+from .models import Category, Choice, Question, QuizSession, SessionQuestion
 
 
 @admin.register(Category)
@@ -45,3 +45,10 @@ class QuizSessionAdmin(admin.ModelAdmin):
     @admin.action(description="Skor tablosundan gizle")
     def hide_from_leaderboard(self, request, queryset):
         queryset.update(is_hidden=True)
+
+
+@admin.register(SessionQuestion)
+class SessionQuestionAdmin(admin.ModelAdmin):
+    list_display = ("session", "position", "question", "is_correct", "points", "time_taken_ms")
+    list_filter = ("is_correct",)
+    raw_id_fields = ("session", "question", "selected_choice")
